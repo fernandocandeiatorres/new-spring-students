@@ -34,4 +34,9 @@ public class StudentServiceImpl implements StudentService{
     public Optional<Student> getStudent(Integer studentId) {
         return studentRepository.findById(studentId);
     }
+
+    @Override
+    public List<Student> getStudentContainingName(String nome) {
+        return studentRepository.findByNameContainingIgnoreCase(nome);
+    }
 }

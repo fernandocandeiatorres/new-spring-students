@@ -9,4 +9,5 @@ public interface StudentService {
     void save(Student student);
     List<Student> getAllStudents();
     Optional<Student> getStudent(Integer studentId);
+    List<Student> getStudentContainingName(String nome);
 }

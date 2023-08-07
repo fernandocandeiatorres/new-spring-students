@@ -17,6 +17,10 @@ import java.util.Optional;
 @RequestMapping("students")
 public class StudentController {
 
+    //TODO:
+    // REFATORAR A CRIAÇÃO DE ID
+    
+
     private StudentService studentService;
 
     public StudentController() {
@@ -33,15 +37,15 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Student>> getStudentById(@PathVariable String id) {
+    public ResponseEntity<?> getStudentById(@PathVariable String id) {
         Optional<Student> std1 = studentService.getStudent(Integer.parseInt(id));
 
         if (std1.isPresent()) {
             return new ResponseEntity<>(std1, HttpStatus.OK);
         } else {
-            //TODO:
-            // COMO EU RETORNARIA UMA MENSAGEM DE ERRO AQUI?
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Id not found");
         }
     }
 
@@ -55,6 +59,21 @@ public class StudentController {
         } else {
             studentService.save(newStudent);
             return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
+        }
+    }
+
+    @GetMapping("/buscar-nome")
+    public ResponseEntity<?> getStudentsPorNome(@RequestParam String nome){
+        List<Student> students = studentService.getStudentContainingName(nome);
+
+        if(students.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("No students with current name found.");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(students);
         }
     }
 }
